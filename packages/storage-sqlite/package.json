@@ -3,18 +3,15 @@
   "version": "0.0.0",
   "description": "SQLite storage adapter for hyphae",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./src/index.js",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./src/index.js"
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "node --experimental-strip-types --test 'tests/**/*.test.ts'",
+    "test": "node --test 'tests/**/*.test.js'",
     "lint": "eslint src tests"
   },
   "dependencies": {
