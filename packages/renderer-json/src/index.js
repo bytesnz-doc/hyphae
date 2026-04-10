@@ -10,12 +10,12 @@ function projectUrl(baseUrl, project) {
 
 /** @param {string} baseUrl @param {Project} project @param {Collection} collection @returns {string} */
 function collectionUrl(baseUrl, project, collection) {
-  return `${projectUrl(baseUrl, project)}/collections/${collection.slug}`;
+  return `${projectUrl(baseUrl, project)}/${collection.slug}`;
 }
 
 /** @param {string} baseUrl @param {Project} project @param {Collection} collection @param {string} id @returns {string} */
 function recordUrl(baseUrl, project, collection, id) {
-  return `${collectionUrl(baseUrl, project, collection)}/records/${id}`;
+  return `${collectionUrl(baseUrl, project, collection)}/${id}`;
 }
 
 // ── PlainJsonRenderer — application/json ─────────────────────────────────────

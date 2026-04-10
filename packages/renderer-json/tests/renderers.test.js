@@ -35,7 +35,7 @@ const rawRecord = {
 };
 
 const context = {
-  request: { url: '/birds/collections/sightings/records/r1', method: 'GET', headers: {}, params: {}, query: {} },
+  request: { url: '/birds/sightings/r1', method: 'GET', headers: {}, params: {}, query: {} },
   project,
   baseUrl: 'https://example.com',
 };
