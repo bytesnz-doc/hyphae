@@ -152,3 +152,43 @@ test('HTML output contains valid HTML5 doctype and <html>', async () => {
 test('esc() escapes <script> to &lt;script&gt;', () => {
   assert.equal(esc('<script>'), '&lt;script&gt;');
 });
+
+test('projectList uses /_projects URL', async () => {
+  const r = new HtmlRenderer();
+  const html = await r.render({ type: 'projectList', project, projects: [project] }, context);
+  assert.ok(html.includes('/_projects'), 'should include /_projects nav link');
+});
+
+test('project uses /:slug/_collections for collection list link', async () => {
+  const r = new HtmlRenderer();
+  const html = await r.render({ type: 'project', project, collections: [collection] }, context);
+  assert.ok(html.includes('/birds/_collections'), 'should link to /birds/_collections');
+  assert.ok(html.includes('/birds/sightings'), 'collection link should be /birds/sightings not /birds/collections/sightings');
+  assert.ok(!html.includes('/birds/collections/'), 'should NOT use /collections/ path prefix');
+});
+
+test('collectionList uses /:project/:collection URLs', async () => {
+  const r = new HtmlRenderer();
+  const html = await r.render({ type: 'collectionList', project, collections: [collection] }, context);
+  assert.ok(html.includes('/birds/sightings'), 'collection link should be /birds/sightings');
+  assert.ok(!html.includes('/birds/collections/'), 'should NOT use /collections/ path prefix');
+});
+
+test('recordList uses /:project/:collection/:id for record links', async () => {
+  const r = new HtmlRenderer();
+  const html = await r.render({
+    type: 'recordList', project, collection,
+    records: [resolvedRecord],
+    pagination: { total: 1, page: { number: 1, size: 20 } },
+  }, context);
+  assert.ok(html.includes('/birds/sightings/r1'), 'record link should be /birds/sightings/r1');
+  assert.ok(!html.includes('/birds/collections/'), 'should NOT use /collections/ path prefix');
+});
+
+test('record uses /:project/:collection/:id for edit/back links', async () => {
+  const r = new HtmlRenderer();
+  const html = await r.render({ type: 'record', project, collection, record: resolvedRecord }, context);
+  assert.ok(html.includes('/birds/sightings/r1/edit'), 'edit link should be /birds/sightings/r1/edit');
+  assert.ok(html.includes('/birds/sightings'), 'back link should be /birds/sightings');
+  assert.ok(!html.includes('/birds/collections/'), 'should NOT use /collections/ path prefix');
+});

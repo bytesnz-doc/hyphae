@@ -39,7 +39,9 @@ function renderProjectList(resource) {
     tag('a', { href: `/${esc(p.slug)}` }, esc(p.label)),
     esc(p.slug),
   ]);
-  const body = tag('h1', {}, 'Projects') + table(['Label', 'Slug'], rows);
+  const body = tag('h1', {}, 'Projects')
+    + nav([{ href: '/_projects', label: 'Projects' }])
+    + table(['Label', 'Slug'], rows);
   return page('Projects', body);
 }
 
@@ -51,11 +53,11 @@ function renderProject(resource) {
   const p = resource.project;
   let body = tag('h1', {}, esc(p.label));
   if (p.description) body += tag('p', {}, esc(p.description));
-  body += nav([{ href: `/${p.slug}/collections`, label: 'Collections' }]);
+  body += nav([{ href: `/${p.slug}/_collections`, label: 'Collections' }]);
 
   if (resource.collections && resource.collections.length > 0) {
     const rows = resource.collections.map(c => [
-      tag('a', { href: `/${esc(p.slug)}/collections/${esc(c.slug)}` }, esc(c.label)),
+      tag('a', { href: `/${esc(p.slug)}/${esc(c.slug)}` }, esc(c.label)),
       esc(c.slug),
       esc(c.description ?? ''),
     ]);
@@ -74,12 +76,12 @@ function renderCollectionList(resource) {
   const collections = resource.collections ?? [];
   const title = `${p.label}: Collections`;
   const rows = collections.map(c => [
-    tag('a', { href: `/${esc(p.slug)}/collections/${esc(c.slug)}` }, esc(c.label)),
+    tag('a', { href: `/${esc(p.slug)}/${esc(c.slug)}` }, esc(c.label)),
     esc(c.slug),
     esc(c.description ?? ''),
   ]);
   const body = tag('h1', {}, esc(title))
-    + nav([{ href: `/${p.slug}`, label: p.label }])
+    + nav([{ href: `/_projects`, label: 'Projects' }, { href: `/${p.slug}`, label: p.label }])
     + table(['Label', 'Slug', 'Description'], rows);
   return page(title, body);
 }
@@ -94,9 +96,10 @@ function renderCollection(resource) {
   let body = tag('h1', {}, esc(c.label));
   if (c.description) body += tag('p', {}, esc(c.description));
   body += nav([
+    { href: `/_projects`, label: 'Projects' },
     { href: `/${p.slug}`, label: p.label },
-    { href: `/${p.slug}/collections`, label: 'Collections' },
-    { href: `/${p.slug}/collections/${c.slug}/records`, label: 'Records' },
+    { href: `/${p.slug}/_collections`, label: 'Collections' },
+    { href: `/${p.slug}/${c.slug}`, label: 'Records' },
   ]);
 
   const fields = resource.resolvedFields ?? c.fields.map(f => ({ ...f }));
@@ -124,8 +127,10 @@ function renderRecordList(resource) {
 
   let body = tag('h1', {}, esc(title));
   body += nav([
+    { href: `/_projects`, label: 'Projects' },
     { href: `/${p.slug}`, label: p.label },
-    { href: `/${p.slug}/collections/${c.slug}`, label: c.label },
+    { href: `/${p.slug}/_collections`, label: 'Collections' },
+    { href: `/${p.slug}/${c.slug}`, label: c.label },
   ]);
 
   if (pagination) {
@@ -146,7 +151,7 @@ function renderRecordList(resource) {
   const rows = records.map(rr => {
     const { record } = rr;
     const idCell = tag('a', {
-      href: `/${esc(p.slug)}/collections/${esc(c.slug)}/records/${esc(record.id)}`,
+      href: `/${esc(p.slug)}/${esc(c.slug)}/${esc(record.id)}`,
     }, esc(record.id));
     const cells = displayFields.map(f => esc(record.data[f.id] ?? ''));
     return [idCell, ...cells];
@@ -180,9 +185,10 @@ function renderRecord(resource) {
 
   let body = tag('h1', {}, `Record: ${esc(record.id)}`);
   body += nav([
+    { href: `/_projects`, label: 'Projects' },
     { href: `/${p.slug}`, label: p.label },
-    { href: `/${p.slug}/collections/${c.slug}`, label: c.label },
-    { href: `/${p.slug}/collections/${c.slug}/records`, label: 'Records' },
+    { href: `/${p.slug}/_collections`, label: 'Collections' },
+    { href: `/${p.slug}/${c.slug}`, label: c.label },
   ]);
 
   const fields = rr.fields ?? c.fields.map(f => ({ ...f }));
@@ -197,8 +203,8 @@ function renderRecord(resource) {
   }
   body += tag('dl', {}, dlContent);
   body += nav([
-    { href: `/${p.slug}/collections/${c.slug}/records/${record.id}/edit`, label: 'Edit' },
-    { href: `/${p.slug}/collections/${c.slug}/records`, label: 'Back to list' },
+    { href: `/${p.slug}/${c.slug}/${record.id}/edit`, label: 'Edit' },
+    { href: `/${p.slug}/${c.slug}`, label: 'Back to list' },
   ]);
 
   return page(`Record: ${record.id}`, body);
