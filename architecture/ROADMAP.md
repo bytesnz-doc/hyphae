@@ -19,6 +19,8 @@ hyphae is in early design phase. This roadmap is intentionally phased to keep sc
 - [ ] `@hyphae/renderer-json` — plain JSON output
 - [ ] `@hyphae/server` — minimal HTTP server with content negotiation
 - [ ] Basic project + collection + record CRUD
+- [ ] Filtering — basic field-level filter support (`filter[path][$op]=value`)
+- [ ] Access control — local auth + RBAC (roles defined per project)
 - [ ] Example: a simple custom collection with JSON Schema
 
 ## Phase 2 — Semantic Web
@@ -30,6 +32,10 @@ hyphae is in early design phase. This roadmap is intentionally phased to keep sc
 - [ ] `@hyphae/renderer-jsonld` — JSON-LD output
 - [ ] `@hyphae/renderer-turtle` — Turtle output
 - [ ] Simple/complex view toggle in the frontend
+- [ ] Subscriptions — polling (`?since=<timestamp>`) as initial delivery mechanism
+- [ ] Schema API endpoint (`Accept: application/schema+json`, `?v=N` versioning)
+- [ ] Reports — basic saved queries with field projection; public report URLs
+- [ ] Data explorer — basic expanding list view of related records
 - [ ] Example: bird observation project using Darwin Core
 
 ## Phase 3 — Offline-First PWA
@@ -37,9 +43,15 @@ hyphae is in early design phase. This roadmap is intentionally phased to keep sc
 
 - [ ] `@hyphae/client` — Svelte PWA
 - [ ] Service worker + offline caching
-- [ ] IndexedDB local storage (RxDB or Dexie.js)
-- [ ] Sync engine with conflict detection
+- [ ] IndexedDB local storage — **TBD between RxDB and `@hyphae/client-store`** (see ADR-007 and [TECHNOLOGY.md](./TECHNOLOGY.md))
+- [ ] Sync engine with conflict detection; patch-based sync; tombstones
+- [ ] Advanced sync configuration — app-level and user-level sync filters
+- [ ] Custom encrypted indexes (hash, number, geometry)
+- [ ] Web Worker for background sync
 - [ ] `@hyphae/storage-couchdb` — for native offline sync deployments
+- [ ] WebSocket subscriptions
+- [ ] Push notification subscriptions
+- [ ] Connector layer — `@hyphae/connector-sql` (SQL database importer)
 
 ## Phase 4 — Ecosystem
 *Goal: more storage backends, more renderers, more term collections.*
@@ -50,6 +62,11 @@ hyphae is in early design phase. This roadmap is intentionally phased to keep sc
 - [ ] `@hyphae/renderer-dwca` — Darwin Core Archive
 - [ ] `@hyphae/collection-schema-org`
 - [ ] Search and reporting UI
+- [ ] Action modules (`@hyphae/action-*`) — event-driven scripts on record CRUD
+- [ ] Encryption at rest (per-collection and per-field; Web Crypto API)
+- [ ] Role-based encryption keys
+- [ ] Migration tooling / DB importer — AI-assisted playbook for existing datasets
+- [ ] Schema inheritance (`extends` on collections)
 - [ ] Example: USAR resource/incident tracking
 
 ## Phase 5 — Federation & Integration
@@ -59,3 +76,4 @@ hyphae is in early design phase. This roadmap is intentionally phased to keep sc
 - [ ] GBIF publishing integration
 - [ ] Webhook/event system for integration with external platforms
 - [ ] Admin UI for managing modules and configuration
+- [ ] Advanced data explorer — graph visualisation view (nodes = records, edges = relationships)

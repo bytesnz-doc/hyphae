@@ -46,10 +46,11 @@ interface FieldDefinition {
   termIri?: string;                  // IRI of the backing ontology term (if any)
   label: string;                     // Human-readable label (simple view)
   description?: string;
-  type: 'string' | 'number' | 'boolean' | 'date' | 'uri' | 'geometry';
+  type: 'string' | 'number' | 'boolean' | 'date' | 'datetime-partial' | 'uri' | 'geometry' | 'embedded';
   required: boolean;
   multiple: boolean;
   constraints?: Record<string, any>; // Derived from ontology or custom
+  'x-computed'?: ComputedDescriptor; // If present, value is derived (not user-entered)
 }
 ```
 
@@ -71,17 +72,55 @@ interface Record {
 }
 ```
 
-## URL Structure (JSON:API)
+## URL Structure
 
-```
-/projects                                               → list all projects
-/projects/:projectSlug                                  → project detail
-/projects/:projectSlug/collections                      → list collections in project
-/projects/:projectSlug/:collectionSlug                  → collection detail + records
-/projects/:projectSlug/:collectionSlug/:recordId        → single record
+See [API.md](./API.md) for the full URL structure.
+
+## Field Types
+
+| Type | Description |
+|---|---|
+| `string` | Plain text |
+| `number` | Integer or float |
+| `boolean` | True/false |
+| `date` | Full ISO 8601 date (`YYYY-MM-DD`) |
+| `datetime-partial` | Partial/floating-precision ISO 8601 datetime — may be just a year (`2024`), year+month (`2024-06`), or a full timestamp. Displayed locale-appropriately. |
+| `uri` | IRI/URL reference |
+| `geometry` | GeoJSON geometry |
+| `embedded` | Nested sub-object; structure defined by a referenced collection or inline schema |
+
+## Schema x-properties
+
+Collection-level metadata that controls storage and UI behaviour. These are stored alongside the collection definition and are accessible via the schema endpoint.
+
+| Property | Description |
+|---|---|
+| `x-item-title` | Field path (or array of paths) to use as the record title in list views |
+| `x-item-id` | JSONPath to the record's ID field (defaults to `id`) |
+| `x-table-fields` | Ordered list of field IDs to display in table/list views |
+| `x-default-page-size` | Default pagination page size for this collection |
+| `x-indexes` | Index definitions for the client store (see [OFFLINE.md](./OFFLINE.md)) |
+
+`x-computed` on a `FieldDefinition` marks the field as derived. Its value is computed by the server (or client-side action) using a function descriptor rather than being entered by the user directly.
+
+## Schema Inheritance
+
+A collection can extend one or more other collections:
+
+```typescript
+interface Collection {
+  // ...
+  extends?: string[];  // IDs of parent collections; fields are inherited in order
+}
 ```
 
-All endpoints respond according to the `Accept` header.
+The collection inherits all fields from its parents. Custom fields are added on top of the inherited set. Field IDs must be unique across the merged set; a child field with the same ID as a parent field overrides it.
+
+The `x-was` property on a field can record the original field ID if a field was renamed during migration, preserving provenance.
+
+## Schema Versioning
+
+Collections carry a version number. The schema at a specific version is accessible via the `?v=N` query parameter on the schema endpoint. This enables gradual migrations: old clients can continue using `?v=1` while new clients use `?v=2`.
 
 ## Ontology Term Resolution
 

@@ -103,3 +103,24 @@ A log of significant architectural decisions. Each entry records the context, th
 - New formats can be added without touching existing modules
 - Term collections can mix terms from multiple ontology formats (e.g. DWC core + a custom JSON Schema extension)
 - Mirrors the hyphae principle: modules are small, composable, and purposeful
+
+---
+
+## ADR-007: Offline Store Library — Deferred Decision
+
+**Date:** 2026-04-10
+**Status:** Under Review
+
+**Context:** Dexie.js (the originally selected client-side store) is increasingly coupled to Dexie Cloud, a commercial sync service. This coupling conflicts with hyphae's FOSS and offline-first principles. The [skemer-store](https://github.com/skemer-store) project has demonstrated that a custom IndexedDB store with encryption-compatible indexes, configurable per-collection sync, patch-based sync, and a clean client API (`fetch`/`fetchSchema`/`subscribe`) is achievable at reasonable complexity. RxDB is a third, mature option with strong reactive and offline support.
+
+**Decision:** Deferred to Phase 3. The two options under evaluation are:
+
+| Option | Notes |
+|---|---|
+| **RxDB** | Mature, well-maintained, reactive, good offline support. Reactivity features overlap with Svelte's own model; bundle size is larger. |
+| **`@hyphae/client-store`** (custom) | Full control; encryption-compatible custom indexes; no commercial dependency; closely follows the skemer-store interface design. Higher initial build cost. |
+
+**Implications:**
+- Whichever library is chosen, the interface exposed to `@hyphae/client` should match the skemer-store API shape (`fetch`, `fetchSchema`, `subscribe`) so the decision can be revisited without changing all call sites.
+- The `@hyphae/client-store` path would support custom hash, number, and geometry indexes stored in IndexedDB (required for encrypted field indexing).
+- The sync engine must implement patch-based sync (only changed fields) and tombstone handling regardless of library choice.

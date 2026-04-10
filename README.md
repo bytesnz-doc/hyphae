@@ -6,7 +6,7 @@ Like the threads of a fungal network, each module in hyphae is a hypha: small, p
 
 ## The Problem
 
-Standards like [Darwin Core](https://dwc.tdwg.org/) exist to make biodiversity data interoperable and meaningful. But they're built for data scientists, not for the bird watcher, the conservation field officer, or the urban search and rescue team leader. The same is true of ontologies in general — rich, precise, and utterly impenetrable to the people who most need them.
+Ontology standards like [Darwin Core](https://dwc.tdwg.org/) exist to make data interoperable and meaningful. But they're built for data scientists, not for the bird watcher or the conservation field officer. The same is true of ontologies in general — rich, precise, and utterly impenetrable to the people who most need them.
 
 **hyphae** bridges that gap.
 
@@ -45,4 +45,4 @@ See the [`architecture/`](./architecture/) folder — each document is itself a 
 
 ## License
 
-[MIT](./LICENSE)
+[AGPL-3.0](./LICENSE)

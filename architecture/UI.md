@@ -60,3 +60,21 @@ Species name [dwc:scientificName]
 - Offline storage: **RxDB** or **Dexie.js**
 - Maps: **Leaflet** (lightweight, FOSS)
 - Design system: TBD — lean toward a minimal, utility-first approach (e.g. a small Tailwind CSS setup)
+
+## Data Explorer
+
+An interactive view for exploring relationships in the data. Starting from a collection or a single record, users can:
+
+- Follow relationships to linked records (e.g. a species observation → location → survey)
+- Expand the graph incrementally — each node can be explored further without reloading
+- Switch between two layouts:
+  - **Graph view** — nodes are records, edges are relationships; rendered as a force-directed or hierarchical graph
+  - **List view** — expanding nested lists, one relationship level at a time
+
+The data explorer respects the simple/complex view toggle: in simple view, nodes and edges display human-readable labels; in complex view, IRIs and term definitions are visible alongside.
+
+## Reports
+
+A report is a saved query combined with a defined projection (a subset of fields to expose). Reports can be made public — the public report URL returns only the specified fields, preventing unintended data disclosure.
+
+Reports are rendered through the standard content negotiation mechanism: the same report URL returns HTML, JSON, CSV, or any other supported format depending on the `Accept` header. This means a public report can be linked to from a spreadsheet formula or consumed by an external API client without any extra configuration.

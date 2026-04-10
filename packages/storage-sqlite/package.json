@@ -1,0 +1,29 @@
+{
+  "name": "@hyphae/storage-sqlite",
+  "version": "0.0.0",
+  "description": "SQLite storage adapter for hyphae",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --experimental-strip-types --test 'tests/**/*.test.ts'",
+    "lint": "eslint src tests"
+  },
+  "dependencies": {
+    "@hyphae/core": "workspace:*",
+    "better-sqlite3": "^11.0.0"
+  },
+  "devDependencies": {
+    "@hyphae/config": "workspace:*",
+    "@types/better-sqlite3": "^7.6.0",
+    "typescript": "^5.5.0"
+  }
+}

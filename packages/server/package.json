@@ -1,0 +1,33 @@
+{
+  "name": "@hyphae/server",
+  "version": "0.0.0",
+  "description": "Fastify HTTP server for hyphae",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "bin": {
+    "hyphae": "./dist/bin.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --experimental-strip-types --test 'tests/**/*.test.ts'",
+    "lint": "eslint src tests"
+  },
+  "dependencies": {
+    "@fastify/static": "^7.0.0",
+    "@hyphae/access-control": "workspace:*",
+    "@hyphae/core": "workspace:*",
+    "fastify": "^5.0.0"
+  },
+  "devDependencies": {
+    "@hyphae/config": "workspace:*",
+    "typescript": "^5.5.0"
+  }
+}
