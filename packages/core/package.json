@@ -3,18 +3,16 @@
   "version": "0.0.0",
   "description": "Core interfaces, data model, and runtime logic for hyphae",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./src/index.js",
+      "types": "./src/index.d.ts"
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "node --experimental-strip-types --test 'tests/**/*.test.ts'",
+    "test": "node --test 'tests/**/*.test.js'",
     "lint": "eslint src tests"
   },
   "devDependencies": {
@@ -22,3 +20,4 @@
     "typescript": "^5.5.0"
   }
 }
+
